@@ -11,12 +11,8 @@ public class Job implements JobInterface {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
-
 	public void execute(){
-
+		System.out.println("This is a Test Job");
 	}
 
 }

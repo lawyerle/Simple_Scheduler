@@ -29,12 +29,22 @@ public class ScheduleManager {
 		
 		
 		//4. Scheduler 积己
-
+		Scheduler sched = new Scheduler();
+		
 		//5. Job 积己
+		Job job = new Job();	
 
 		//6. JobExtender 积己
 		
+		JobExtender je = new JobExtender();
+		
+		je.addJob(job);
+		
 		//7. Scheduler俊 殿废
+		sched.addSchedJob(je);
+		
+		//8. Scheduler Start!!
+		sched.start();
 		
 	}
 	
