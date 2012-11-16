@@ -1,5 +1,7 @@
 package com.sicc.schedule;
 
+import com.sicc.thread.ThreadPool;
+
 /**
  * 실제 수행될 Job Class를 감싸는 확장 클래스로 수행되어야 할 시간정보를 가지고 있음.
  * 
@@ -15,7 +17,8 @@ public class JobExtender {
 	private long interval;
 
 	public JobExtender(){
-
+		timeToAwake = 0;
+		interval = 10;
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class JobExtender {
 
 	
 	private void runJob(){
-		this.m_JobInterface.execute();
+		ThreadPool.getInstance().execute(this.m_JobInterface);
 	}
 
 	/**

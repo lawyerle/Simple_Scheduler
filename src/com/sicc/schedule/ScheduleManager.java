@@ -1,5 +1,8 @@
 package com.sicc.schedule;
 
+import com.sicc.schedule.test.Job;
+import com.sicc.thread.ThreadPoolConfig;
+
 /**
  * @author jaeman
  * @version 1.0
@@ -22,9 +25,6 @@ public class ScheduleManager {
 		
 		tpc.loadConfig("aaa");
 		
-		//2. ThreadPoolManager 생성
-		ThreadPoolManager tpm = new ThreadPoolManager();
-		
 		//3. JobConfig 로딩
 		
 		
@@ -36,15 +36,18 @@ public class ScheduleManager {
 
 		//6. JobExtender 생성
 		
-		JobExtender je = new JobExtender();
+		JobExtender jex = new JobExtender();
 		
-		je.addJob(job);
+		jex.addJob(job);
 		
 		//7. Scheduler에 등록
-		sched.addSchedJob(je);
+		sched.addSchedJob(jex);
 		
 		//8. Scheduler Start!!
-		sched.start();
+		
+		Thread thread = new Thread(sched);
+
+		thread.start();
 		
 	}
 	

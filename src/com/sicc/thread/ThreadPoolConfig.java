@@ -1,4 +1,4 @@
-package com.sicc.schedule;
+package com.sicc.thread;
 
 /**
  * @author jaeman

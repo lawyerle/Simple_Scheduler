@@ -1,4 +1,6 @@
-package com.sicc.schedule;
+package com.sicc.schedule.test;
+
+import com.sicc.schedule.JobInterface;
 
 /**
  * @author jaeman

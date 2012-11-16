@@ -1,20 +1,21 @@
 package com.sicc.schedule;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  * @author jaeman
  * @version 1.0
  * @created 07-11-2012 ¿ÀÈÄ 3:49:22
  */
-public class Scheduler {
+public class Scheduler implements Runnable {
 
-	private JobExtender scheduledJobs;
+	private List<JobExtender> scheduledJobs = new ArrayList<JobExtender>();
+	private int testInt = 0;
 
 	public Scheduler(){
-
-	}
-
-	public void finalize() throws Throwable {
-
+		
 	}
 
 	/**
@@ -22,11 +23,31 @@ public class Scheduler {
 	 * @param JobExt
 	 */
 	public boolean addSchedJob(JobExtender JobExt){
-		return false;
+		scheduledJobs.add(JobExt);
+		
+		return true;
 	}
 
-	public void start(){
+	private void startTask(){
+		for (JobExtender job : scheduledJobs) {
+			job.notifyTime(testInt);
+		}
+		testInt++;
+		System.out.println("timd : " + testInt);
+	}
 
+	@Override
+	public void run() {
+		try {
+			while(true) {
+				Thread.sleep(1000);
+				startTask();				
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
