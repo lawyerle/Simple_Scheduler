@@ -54,12 +54,14 @@ public class ThreadPool {
 		public void run() {
 			try {
 				while(true) {
+					JobInterface work = null;
+					
 					synchronized (pool) {
-						JobInterface work = null;
 						work = (JobInterface)pool.dequeue();
-						System.out.println(this.getName());
-						work.execute();
 					}
+					
+					System.out.println(this.getName());
+					work.execute();
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

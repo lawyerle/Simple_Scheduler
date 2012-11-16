@@ -32,16 +32,20 @@ public class ScheduleManager {
 		Scheduler sched = new Scheduler();
 		
 		//5. Job 积己
-		Job job = new Job();	
+		Job job1 = new Job(1);	
+		Job job2 = new Job(2);	
 
 		//6. JobExtender 积己
 		
-		JobExtender jex = new JobExtender();
+		JobExtender jex1 = new JobExtender();
+		JobExtender jex2 = new JobExtender();
 		
-		jex.addJob(job);
+		jex1.addJob(job1);
+		jex2.addJob(job2);
 		
 		//7. Scheduler俊 殿废
-		sched.addSchedJob(jex);
+		sched.addSchedJob(jex1);
+		sched.addSchedJob(jex2);
 		
 		//8. Scheduler Start!!
 		
