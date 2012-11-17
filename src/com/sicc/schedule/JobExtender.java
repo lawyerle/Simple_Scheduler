@@ -13,7 +13,7 @@ import com.sicc.thread.ThreadPool;
 public class JobExtender {
 
 	private long timeToAwake;
-	private JobInterface m_JobInterface;
+	private Runnable m_Job;
 	private long interval;
 
 	public JobExtender(){
@@ -26,10 +26,10 @@ public class JobExtender {
 	 * @author lawyerle01
 	 * @param job
 	 */
-	public boolean addJob(JobInterface job){
+	public boolean addJob(Runnable job){
 		
 		if (job != null) {
-			this.m_JobInterface = job;
+			this.m_Job = job;
 			return true;			
 		} else {
 			return false;
@@ -50,7 +50,7 @@ public class JobExtender {
 
 	
 	private void runJob(){
-		ThreadPool.getInstance().execute(this.m_JobInterface);
+		ThreadPool.getInstance().execute(this.m_Job);
 	}
 
 	/**

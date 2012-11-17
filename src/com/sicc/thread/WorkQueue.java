@@ -2,18 +2,18 @@ package com.sicc.thread;
 
 import java.util.LinkedList;
 
-import com.sicc.schedule.JobInterface;
+//import com.sicc.schedule.JobInterface;
 
 public class WorkQueue {
 
-	private LinkedList<JobInterface> workList = new LinkedList<JobInterface>();
+	private LinkedList<Runnable> workList = new LinkedList<Runnable>();
 	
-	public synchronized void enqueue(JobInterface job) {
+	public synchronized void enqueue(Runnable job) {
 		workList.addLast(job);
 		notify();
 	}
 	
-	public synchronized JobInterface dequeue() throws InterruptedException {
+	public synchronized Runnable dequeue() throws InterruptedException {
 		
 		while (workList.size() <= 0) {
 			wait();
