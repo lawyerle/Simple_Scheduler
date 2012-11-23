@@ -19,7 +19,7 @@ public class Scheduler implements Runnable {
 	}
 
 	/**
-	 * 
+	 * @author lawyerle01
 	 * @param JobExt
 	 */
 	public boolean addSchedJob(JobExtender JobExt){

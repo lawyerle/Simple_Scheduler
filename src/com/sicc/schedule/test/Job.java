@@ -19,7 +19,7 @@ public class Job implements Runnable {
 		System.out.println("This is a Test Job #" + sequence);
 		for (int i = 0; i < 100; i++) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

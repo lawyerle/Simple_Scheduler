@@ -1,12 +1,5 @@
 package com.sicc.thread;
 
-//import java.util.ArrayList;
-//import java.util.List;
-
-//import com.sicc.schedule.JobInterface;
-
-
-
 /**
  * @author jaeman
  * @version 1.0
@@ -14,7 +7,6 @@ package com.sicc.thread;
  */
 public class ThreadPool {
 
-//	private List<JobThread> m_JobThreadList = new ArrayList<JobThread>();
 	private static ThreadPool m_ThreadPoolManager = null;
 	public static int threadId = 0;
 	private WorkQueue pool = new WorkQueue();
@@ -22,65 +14,80 @@ public class ThreadPool {
 	private int threadMax = 0;
 	private int currentThreadCount = 0;
 	private int idleThreadCount = 0;
-	private final int THREADGROWUNIT = 10;
-	private boolean quit = false;
+	private boolean close = false;
+	private int allowedIdleCount = 3;
+	private int workThreadCount = 0;
+	private static int INCREASE_UNIT_DEFAULT = 6;
+
+	public synchronized void close() {
+		this.close = true;
+		pool.close();
+	}
 
 	private ThreadPool(int min, int max){
 		this.threadMin = min;
 		this.threadMax = max;
 		
-		threadPoolSetup();
 	}
 	
 	public static ThreadPool getInstance() {
 		if(m_ThreadPoolManager == null) {
-			
-			m_ThreadPoolManager = new ThreadPool(10, 20);
+			ThreadPoolConfig cfg = new ThreadPoolConfig();
+			cfg.loadConfig("aaa");
+			m_ThreadPoolManager = new ThreadPool(cfg.getMinThread(), cfg.getMaxThread());
 			
 		}
 		
 		return m_ThreadPoolManager;
 	}
 	
-	private void threadPoolSetup() {
-		if (currentThreadCount < threadMin) {
-			for (int i = 0; i < threadMin; i++) {
-				JobThread tmp = new JobThread();
-				tmp.start();
-//				m_JobThreadList.add(tmp);
-				currentThreadCount++;
-				idleThreadCount++;				
-			}
-		} else if (idleThreadCount <= 0) {
-			for (int i = 0; i < THREADGROWUNIT; i++) {
-				if (currentThreadCount >= threadMax) {
-					break;
+	private void threadPoolIncrease() {
+		
+		synchronized (pool) {
+
+			if(idleThreadCount == 0 && currentThreadCount < threadMax) {
+
+				for (int i = 0; i < INCREASE_UNIT_DEFAULT; i++) {
+					
+					JobThread tmp = new JobThread();
+					tmp.start();
+					currentThreadCount++;
+					idleThreadCount++;
+					
 				}
-				JobThread tmp = new JobThread();
-				tmp.start();
-//				m_JobThreadList.add(tmp);
-				currentThreadCount++;
-				idleThreadCount++;
+				
+				System.out.println("Current : " + currentThreadCount);
+				System.out.println("Idle : " + idleThreadCount);
+				
 			}
-		} 
-	}
-
-	private synchronized boolean isTerminate() {
-		
-		if (currentThreadCount > threadMax) {
-			currentThreadCount--;
-			return true;
-		} else {
-			idleThreadCount++;
-			return false;
 		}
-		
 	}
 
-	public synchronized void execute(Runnable job) {
-		idleThreadCount--;
-		threadPoolSetup();
+	private boolean isTerminate() {
+
+		synchronized (pool) {
+			workThreadCount --;
+			idleThreadCount++;			
+			if (idleThreadCount > allowedIdleCount  && currentThreadCount > threadMin) {
+				currentThreadCount--;
+				idleThreadCount--;
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public void execute(Runnable job) {
+		threadPoolIncrease();
 		pool.enqueue(job);
+	}
+	
+	private void beginWork() {
+		synchronized (pool) {
+			idleThreadCount--;
+			workThreadCount++;
+		}
 	}
 	
 	/**
@@ -96,7 +103,7 @@ public class ThreadPool {
 
 		public void run() {
 			try {
-				while(!quit) {
+				while(!close) {
 					Runnable work = null;
 					
 					synchronized (pool) {
@@ -104,13 +111,15 @@ public class ThreadPool {
 					}
 					
 					System.out.println(this.getName());
-					if(work != null)
-						work.run();
+					beginWork();
+					work.run();
 					
 					if(isTerminate())
 						break;
 				}
 			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (AleadyClosedException e) {
 				e.printStackTrace();
 			}
 		}
