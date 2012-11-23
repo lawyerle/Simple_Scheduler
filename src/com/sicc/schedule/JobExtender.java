@@ -16,9 +16,10 @@ public class JobExtender {
 	private Runnable m_Job;
 	private long interval;
 
-	public JobExtender(){
-		timeToAwake = 0;
-		interval = 10;
+	public JobExtender(long period){
+		timeToAwake = System.currentTimeMillis();
+		interval = period;
+		setNextAwakeTime();
 	}
 
 	/**

@@ -37,8 +37,8 @@ public class ScheduleManager {
 
 		//6. JobExtender »ý¼º
 		
-		JobExtender jex1 = new JobExtender();
-		JobExtender jex2 = new JobExtender();
+		JobExtender jex1 = new JobExtender(5000);
+		JobExtender jex2 = new JobExtender(10000);
 		
 		jex1.addJob(job1);
 		jex2.addJob(job2);

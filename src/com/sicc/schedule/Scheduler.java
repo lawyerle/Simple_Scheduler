@@ -30,10 +30,10 @@ public class Scheduler implements Runnable {
 
 	private void startTask(){
 		for (JobExtender job : scheduledJobs) {
-			job.notifyTime(testInt);
+			job.notifyTime(System.currentTimeMillis());
 		}
 		testInt++;
-		System.out.println("timd : " + testInt);
+		System.out.println("time : " + testInt);
 	}
 
 	@Override
@@ -44,7 +44,6 @@ public class Scheduler implements Runnable {
 				startTask();				
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

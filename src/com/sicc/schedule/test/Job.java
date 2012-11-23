@@ -17,7 +17,7 @@ public class Job implements Runnable {
 
 	public void run(){
 		System.out.println("This is a Test Job #" + sequence);
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 100; i++) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
